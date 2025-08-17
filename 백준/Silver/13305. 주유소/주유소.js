@@ -1,25 +1,28 @@
 const readline = require('readline');
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 let input = [];
 
 rl.on('line', (line) => {
-  input.push(line.trim());
+  input.push(...line.trim().split(/\s+/).map(Number)); 
 }).on('close', () => {
-  const n = Number(input[0]);
-  const distances = input[1].split(' ').map(Number);
-  const prices = input[2].split(' ').map(Number);
+  const n = input[0];
+  const distances = input.slice(1, n);        
+  const prices = input.slice(n, n + n);   
 
-  let total = 0;
-  let minPrice = prices[0];
+  let total = 0n;   
+  let minPrice = BigInt(prices[0]);
 
   for (let i = 0; i < n - 1; i++) {
-    if (prices[i] < minPrice) {
-      minPrice = prices[i];
+    if (BigInt(prices[i]) < minPrice) {
+      minPrice = BigInt(prices[i]);
     }
-    total += minPrice * distances[i];
+    total += minPrice * BigInt(distances[i]);
   }
 
-  console.log(total);
+  console.log(total.toString());
 });
